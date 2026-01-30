@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Tracker</title>
+    <link rel="stylesheet" href="styles/global.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>💰 Finance Tracker</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active" data-page="dashboard">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-page="add-expense">
+                    <span class="icon">➕</span>
+                    <span>Add Expense</span>
+                </li>
+                <li class="nav-item" data-page="expenses">
+                    <span class="icon">📝</span>
+                    <span>All Expenses</span>
+                </li>
+                <li class="nav-item" data-page="my-categories">
+                    <span class="icon">🏷️</span>
+                    <span>My Categories</span>
+                </li>
+                <!-- Admin only items -->
+                <li class="nav-item admin-only" data-page="users" style="display: none;">
+                    <span class="icon">👥</span>
+                    <span>Users</span>
+                </li>
+                <li class="nav-item admin-only" data-page="categories" style="display: none;">
+                    <span class="icon">🏷️</span>
+                    <span>All Categories</span>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-role" id="userRole">user</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <div class="page active" id="dashboard-page">
+            <div class="page-header">
+                <h1>Dashboard</h1>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">💵</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Total Expenses</div>
+                        <div class="stat-value" id="totalExpenses">$0.00</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <div class="stat-label">This Month</div>
+                        <div class="stat-value" id="monthExpenses">$0.00</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Total Transactions</div>
+                        <div class="stat-value" id="totalTransactions">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Average Expense</div>
+                        <div class="stat-value" id="avgExpense">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="recent-expenses">
+                    <h2>Recent Expenses</h2>
+                    <div id="recentExpensesList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Expense Page -->
+        <div class="page" id="add-expense-page">
+            <div class="page-header">
+                <h1>Add New Expense</h1>
+            </div>
+            
+            <div class="form-container">
+                <form id="addExpenseForm">
+                    <div class="form-group">
+                        <label for="expenseAmount">Amount *</label>
+                        <input type="number" id="expenseAmount" step="0.01" required placeholder="0.00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expenseCategory">Category *</label>
+                        <select id="expenseCategory" required>
+                            <option value="">Select a category</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expenseDate">Date *</label>
+                        <input type="date" id="expenseDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expenseDescription">Description</label>
+                        <textarea id="expenseDescription" rows="4" placeholder="Optional description..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Add Expense</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- All Expenses Page -->
+        <div class="page" id="expenses-page">
+            <div class="page-header">
+                <h1>All Expenses</h1>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="expenseSearchFilter" class="filter-label">Search:</label>
+                    <input type="text" id="expenseSearchFilter" placeholder="Search...">
+                </div>
+                <div class="filter-group">
+                    <label for="expenseCategoryFilter" class="filter-label">Category:</label>
+                    <select id="expenseCategoryFilter">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="expenseDateFromFilter" class="filter-label">From Date:</label>
+                    <input type="date" id="expenseDateFromFilter">
+                </div>
+                <div class="filter-group">
+                    <label for="expenseDateToFilter" class="filter-label">To Date:</label>
+                    <input type="date" id="expenseDateToFilter">
+                </div>
+                <button class="btn btn-secondary" id="clearExpenseFilters">Clear Filters</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table" id="expensesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expensesTableBody">
+                        <tr>
+                            <td colspan="6" class="no-data">No expenses found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- My Categories Page -->
+        <div class="page" id="my-categories-page">
+            <div class="page-header">
+                <h1>My Categories</h1>
+                <button class="btn btn-primary" id="addMyCategoryBtn">Add Category</button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="myCategorySearchFilter" class="filter-label">Search:</label>
+                    <input type="text" id="myCategorySearchFilter" placeholder="Search categories...">
+                </div>
+                <button class="btn btn-secondary" id="clearMyCategoryFilters">Clear Filters</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table" id="myCategoriesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myCategoriesTableBody">
+                        <tr>
+                            <td colspan="5" class="no-data">No categories found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Page (Admin Only) -->
+        <div class="page" id="users-page">
+            <div class="page-header">
+                <h1>User Management</h1>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="userSearchFilter" class="filter-label">Search:</label>
+                    <input type="text" id="userSearchFilter" placeholder="Search users...">
+                </div>
+                <div class="filter-group">
+                    <label for="userRoleFilter" class="filter-label">Role:</label>
+                    <select id="userRoleFilter">
+                        <option value="">All Roles</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" id="clearUserFilters">Clear Filters</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Role</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="6" class="no-data">No users found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Categories Page (Admin Only) -->
+        <div class="page" id="categories-page">
+            <div class="page-header">
+                <h1>Category Management</h1>
+                <button class="btn btn-primary" id="addCategoryBtn">Add Category</button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="categorySearchFilter" class="filter-label">Search:</label>
+                    <input type="text" id="categorySearchFilter" placeholder="Search categories...">
+                </div>
+                <button class="btn btn-secondary" id="clearCategoryFilters">Clear Filters</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table" id="categoriesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriesTableBody">
+                        <tr>
+                            <td colspan="5" class="no-data">No categories found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for User Profile Edit -->
+    <div class="modal" id="userProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="editFirstName">First Name *</label>
+                    <input type="text" id="editFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editLastName">Last Name *</label>
+                    <input type="text" id="editLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPassword">New Password (leave blank to keep current)</label>
+                    <input type="password" id="editPassword">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelEditProfile">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Edit User (Admin) -->
+    <div class="modal" id="editUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit User</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label for="editUserFirstName">First Name *</label>
+                    <input type="text" id="editUserFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editUserLastName">Last Name *</label>
+                    <input type="text" id="editUserLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editUserRole">Role *</label>
+                    <select id="editUserRole" required>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editUserPassword">New Password (leave blank to keep current)</label>
+                    <input type="password" id="editUserPassword">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Add/Edit Category -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="categoryModalTitle">Add Category</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label for="categoryName">Category Name *</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label for="categoryDescription">Description</label>
+                    <textarea id="categoryDescription" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Edit Expense -->
+    <div class="modal" id="editExpenseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Expense</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="editExpenseForm">
+                <input type="hidden" id="editExpenseId">
+                <div class="form-group">
+                    <label for="editExpenseAmount">Amount *</label>
+                    <input type="number" id="editExpenseAmount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="editExpenseCategory">Category *</label>
+                    <select id="editExpenseCategory" required>
+                        <option value="">Select a category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editExpenseDate">Date *</label>
+                    <input type="date" id="editExpenseDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editExpenseDescription">Description</label>
+                    <textarea id="editExpenseDescription" rows="4"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Expense Details -->
+    <div class="modal" id="expenseDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Expense Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="expense-detail-content">
+                <div class="detail-row">
+                    <span class="detail-label">Expense ID:</span>
+                    <span class="detail-value" id="detailExpenseId">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Amount:</span>
+                    <span class="detail-value" id="detailExpenseAmount">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Category:</span>
+                    <span class="detail-value" id="detailExpenseCategory">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Date:</span>
+                    <span class="detail-value" id="detailExpenseDate">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Description:</span>
+                    <span class="detail-value" id="detailExpenseDescription">-</span>
+                </div>
+                <div class="detail-row" id="detailUserRow">
+                    <span class="detail-label">User:</span>
+                    <span class="detail-value" id="detailExpenseUser">-</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary modal-cancel">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Confirmation Dialog -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 id="confirmTitle">Confirm</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div style="padding: 1.5rem;">
+                <p id="confirmMessage" style="margin: 0; line-height: 1.6;"></p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="confirmCancel">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmOk">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
