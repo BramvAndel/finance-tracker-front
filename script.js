@@ -201,6 +201,7 @@ async function handleAddExpense(e) {
         amount: parseFloat(document.getElementById('expenseAmount').value),
         category_ids: categoryId ? [parseInt(categoryId)] : [],
         expense_date: document.getElementById('expenseDate').value,
+        store_name: document.getElementById('expenseStoreName').value || null,
         description: document.getElementById('expenseDescription').value || null
     };
     
@@ -251,7 +252,7 @@ function displayExpenses(expensesToShow) {
     const tbody = document.getElementById('expensesTableBody');
     
     if (expensesToShow.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="no-data">No expenses found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="no-data">No expenses found</td></tr>';
         return;
     }
     
@@ -260,6 +261,7 @@ function displayExpenses(expensesToShow) {
             <td>${expense.expense_id}</td>
             <td>$${parseFloat(expense.amount).toFixed(2)}</td>
             <td>${expense.categories || 'N/A'}</td>
+            <td>${expense.store_name || '-'}</td>
             <td>${formatDate(expense.expense_date)}</td>
             <td>${expense.description || '-'}</td>
             <td class="table-actions">
@@ -278,6 +280,7 @@ async function openEditExpenseModal(expenseId) {
     document.getElementById('editExpenseAmount').value = expense.amount;
     document.getElementById('editExpenseCategory').value = expense.category_id;
     document.getElementById('editExpenseDate').value = expense.expense_date.split('T')[0];
+    document.getElementById('editExpenseStoreName').value = expense.store_name || '';
     document.getElementById('editExpenseDescription').value = expense.description || '';
     
     openModal('editExpenseModal');
@@ -293,6 +296,7 @@ async function handleEditExpense(e) {
         amount: parseFloat(document.getElementById('editExpenseAmount').value),
         category_ids: categoryId ? [parseInt(categoryId)] : [],
         expense_date: document.getElementById('editExpenseDate').value,
+        store_name: document.getElementById('editExpenseStoreName').value || null,
         description: document.getElementById('editExpenseDescription').value || null
     };
     
@@ -1034,6 +1038,7 @@ function displayExpenseDetails(expense) {
     document.getElementById('detailExpenseAmount').textContent = `$${parseFloat(expense.amount).toFixed(2)}`;
     document.getElementById('detailExpenseCategory').textContent = expense.categories || 'Uncategorized';
     document.getElementById('detailExpenseDate').textContent = formatDate(expense.expense_date);
+    document.getElementById('detailExpenseStoreName').textContent = expense.store_name || 'Not specified';
     document.getElementById('detailExpenseDescription').textContent = expense.description || 'No description provided';
     
     // Show/hide user row based on whether we have user info

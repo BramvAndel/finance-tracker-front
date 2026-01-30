@@ -127,6 +127,11 @@
                     </div>
                     
                     <div class="form-group">
+                        <label for="expenseStoreName">Store Name</label>
+                        <input type="text" id="expenseStoreName" placeholder="e.g., Walmart, Amazon, etc.">
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="expenseDescription">Description</label>
                         <textarea id="expenseDescription" rows="4" placeholder="Optional description..."></textarea>
                     </div>
@@ -171,6 +176,7 @@
                             <th>ID</th>
                             <th>Amount</th>
                             <th>Category</th>
+                            <th>Store</th>
                             <th>Date</th>
                             <th>Description</th>
                             <th>Actions</th>
@@ -178,7 +184,7 @@
                     </thead>
                     <tbody id="expensesTableBody">
                         <tr>
-                            <td colspan="6" class="no-data">No expenses found</td>
+                            <td colspan="7" class="no-data">No expenses found</td>
                         </tr>
                     </tbody>
                 </table>
@@ -412,6 +418,10 @@
                     <input type="date" id="editExpenseDate" required>
                 </div>
                 <div class="form-group">
+                    <label for="editExpenseStoreName">Store Name</label>
+                    <input type="text" id="editExpenseStoreName" placeholder="e.g., Walmart, Amazon, etc.">
+                </div>
+                <div class="form-group">
                     <label for="editExpenseDescription">Description</label>
                     <textarea id="editExpenseDescription" rows="4"></textarea>
                 </div>
@@ -446,6 +456,10 @@
                 <div class="detail-row">
                     <span class="detail-label">Date:</span>
                     <span class="detail-value" id="detailExpenseDate">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Store:</span>
+                    <span class="detail-value" id="detailExpenseStoreName">-</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Description:</span>
