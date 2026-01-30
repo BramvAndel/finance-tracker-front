@@ -725,6 +725,7 @@ async function handleEditProfile(e) {
             const updatedUser = await response.json();
             currentUser.first_name = updatedUser.first_name;
             currentUser.last_name = updatedUser.last_name;
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
             updateUserProfile();
             showAlert('Profile updated successfully!', 'success');
             closeAllModals();
