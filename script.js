@@ -703,13 +703,13 @@ async function handleEditProfile(e) {
     e.preventDefault();
     
     const userData = {
-        first_name: document.getElementById('editFirstName').value,
-        last_name: document.getElementById('editLastName').value,
+        first_name: document.getElementById('editFirstName').value.trim(),
+        last_name: document.getElementById('editLastName').value.trim(),
         role: currentUser.role
     };
     
-    const password = document.getElementById('editPassword').value;
-    if (password) {
+    const password = document.getElementById('editPassword').value.trim();
+    if (password && password.length > 0) {
         userData.password = password;
     }
     
