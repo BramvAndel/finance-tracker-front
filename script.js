@@ -1,5 +1,5 @@
 // ===== CONFIGURATION =====
-const API_BASE_URL = 'https://finance-tracker-api-beta.vercel.app/api/v1';
+const API_BASE_URL = 'https://finance-api.bramvanandel.dev/api/v1';
 
 // ===== STATE MANAGEMENT =====
 let currentUser = null;
