@@ -30,8 +30,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ===== AUTHENTICATION =====
 async function checkAuth() {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     // Get user from sessionStorage (just display data, not credentials)
     const userStr = sessionStorage.getItem("currentUser");
     if (!userStr) {
