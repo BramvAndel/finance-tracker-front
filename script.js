@@ -11,6 +11,8 @@ let users = [];
 document.addEventListener("DOMContentLoaded", async () => {
   // Check authentication
 
+  await new promise((resolve) => setTimeout(resolve, 1000));
+
   await checkAuth();
 
   // Initialize event listeners
@@ -30,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ===== AUTHENTICATION =====
 async function checkAuth() {
   try {
-    await new promise((resolve) => setTimeout(resolve, 500));
+    await new promise((resolve) => setTimeout(resolve, 1000));
 
     // Get user from sessionStorage (just display data, not credentials)
     const userStr = sessionStorage.getItem("currentUser");
