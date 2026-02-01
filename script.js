@@ -11,8 +11,6 @@ let users = [];
 document.addEventListener("DOMContentLoaded", async () => {
   // Check authentication
 
-  await new promise((resolve) => setTimeout(resolve, 1000));
-
   await checkAuth();
 
   // Initialize event listeners
