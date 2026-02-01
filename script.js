@@ -33,11 +33,11 @@ async function checkAuth() {
     await new promise((resolve) => setTimeout(resolve, 1000));
 
     // Get user from sessionStorage (just display data, not credentials)
-    const userStr = sessionStorage.getItem("currentUser");
-    if (!userStr) {
-      window.location.href = "login.html";
-      return;
-    }
+    // const userStr = sessionStorage.getItem("currentUser");
+    // if (!userStr) {
+    //   window.location.href = "login.html";
+    //   return;
+    // }
 
     currentUser = JSON.parse(userStr);
 
